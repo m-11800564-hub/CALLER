@@ -10,23 +10,18 @@ if "history" not in st.session_state:
     st.session_state.history = []
 
 # Sidebar Controls
-st.sidebar.header("⚙️ Calling Controls")
+st.sidebar.header("⚙️ Control Panel")
 
-# Group Selection / Custom Typing
-group_type = st.sidebar.radio("Group Input Method", ["Preset Groups", "Type Custom Group"])
-
-if group_type == "Preset Groups":
-    selected_group = st.sidebar.selectbox("Select Group", ["Group A", "Group B", "Group C", "VIPs", "Table / Counter"])
-else:
-    selected_group = st.sidebar.text_input("Enter Group Name", value="Group A")
-
+# Single text field for custom group input
+group_name = st.sidebar.text_input("Group Label / Name", value="Group 1")
 call_number = st.sidebar.number_input("Number to Call", min_value=1, value=1, step=1)
 enable_tts = st.sidebar.checkbox("Enable Voice Announcement", value=True)
 
-# Calling Actions
 st.sidebar.divider()
+
+# Calling Actions
 if st.sidebar.button("📢 Call Group & Number", type="primary", use_container_width=True):
-    call_entry = {"group": selected_group, "number": int(call_number)}
+    call_entry = {"group": group_name, "number": int(call_number)}
     st.session_state.history.append(call_entry)
 
 if st.sidebar.button("🔄 Reset Queue", use_container_width=True):
@@ -37,7 +32,7 @@ if st.sidebar.button("🔄 Reset Queue", use_container_width=True):
 col_main, col_hist = st.columns([2, 1])
 
 with col_main:
-    st.subheader("📺 Now Serving")
+    st.subheader("📺 Display Screen")
     if st.session_state.history:
         current = st.session_state.history[-1]
         group_text = current["group"]
@@ -71,7 +66,7 @@ with col_main:
                 width=0,
             )
     else:
-        st.info("No group called yet. Use the sidebar to send a call.")
+        st.info("Type your group name and click **'Call Group & Number'** to broadcast.")
 
 with col_hist:
     st.subheader("📋 Recent Calls")
